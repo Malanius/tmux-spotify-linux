@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
 CURRENT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PATH="/usr/local/bin:$PATH:/usr/sbin"
 
 open_spotify() {
   $(open -a Spotify)
