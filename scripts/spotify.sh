@@ -91,7 +91,7 @@ show_menu() {
       shuffling_label="Turn on shuffle"
     fi
     $(
-      tmux display-menu -T "#[align=centre fg=green]Spotify" -x R -y P \
+      tmux display-menu -T "#[align=centre fg=green] Spotify " -x R -y P \
         "" \
         "-#[nodim]Track: $track_name" "" "run -b 'printf \"%s\" $quoted_track_name | pbcopy'" \
         "-#[nodim]Artist: $artist" "" "" \
