@@ -31,6 +31,10 @@ toggle_repeat() {
   fi
 }
 
+get_shuffle_status() {
+  echo $(busctl -j --user get-property org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player Shuffle | jq -r '.data')
+}
+
 toggle_shuffle() {
   if [ "$1" == "true" ]; then
     $(osascript -e "tell application \"Spotify\" to set shuffling to false")
@@ -73,11 +77,16 @@ show_menu() {
     local album=$(echo $metadata | jq -r '.data["xesam:album"].data')
     local id=$(echo $metadata | jq -r '.data["mpris:trackid"].data')
 
-    local is_repeat_on=${arr[0]}
-    local is_shuffle_on=${arr[1]}
-
-    local repeating_label=""
+    local is_shuffle_on=$(get_shuffle_status)
     local shuffling_label=""
+    if [ "$is_shuffle_on" == "true" ]; then
+      shuffling_label="Turn off shuffle"
+    else
+      shuffling_label="Turn on shuffle"
+    fi
+
+    local is_repeat_on=${arr[0]}
+    local repeating_label=""
 
     if [ "$is_repeat_on" == "true" ]; then
       repeating_label="Turn off repeat"
@@ -85,11 +94,6 @@ show_menu() {
       repeating_label="Turn on repeat"
     fi
 
-    if [ "$is_shuffle_on" == "true" ]; then
-      shuffling_label="Turn off shuffle"
-    else
-      shuffling_label="Turn on shuffle"
-    fi
     $(
       tmux display-menu -T "#[align=centre fg=green] Spotify " -x R -y P \
         "" \
