@@ -7,6 +7,10 @@ CURRENT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 #   $(open -a Spotify)
 # }
 
+get_metadata() {
+  echo $(busctl -j --user get-property org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player Metadata)
+}
+
 toggle_play_pause() {
   $(osascript -e "tell application \"Spotify\" to playpause")
 }
@@ -36,15 +40,14 @@ toggle_shuffle() {
 }
 
 show_menu() {
-
   local spotify_pid=$(pidof -s spotify || pidof -s .spotify.wrapped)
   if [ -z "$spotify_pid" ]; then
     $(
       tmux display-menu -T "#[align=centre fg=green]Spotify" -x R -y P \
         "Spotify is not runnning!" "" "" \
-        # "Open Spotify" o "run -b 'source \"$CURRENT_DIR/spotify.sh\" && open_spotify'" \
+        \
         "" \
-        "Close menu" q ""
+        "Close menu" q "" # "Open Spotify" o "run -b 'source \"$CURRENT_DIR/spotify.sh\" && open_spotify'" \
     )
   # elif [[ $id == *":episode:"* ]]; then
   # TODO: handle this after songs are working correctly
@@ -64,12 +67,14 @@ show_menu() {
   #       "Close menu"       q "" \
   #   )
   else
+    local metadata=$(get_metadata)
+    local artist=$(echo $metadata | jq -r '.data["xesam:artist"].data[0]') # Spotify only sends the first artist anywas
+    local track_name=$(echo $metadata | jq -r '.data["xesam:title"].data')
+    local album=$(echo $metadata | jq -r '.data["xesam:album"].data')
+    local id=$(echo $metadata | jq -r '.data["mpris:trackid"].data')
+
     local is_repeat_on=${arr[0]}
     local is_shuffle_on=${arr[1]}
-    local artist=${arr[2]}
-    local track_name=${arr[3]}
-    local album=${arr[4]}
-    local id=${arr[5]}
 
     local repeating_label=""
     local shuffling_label=""
