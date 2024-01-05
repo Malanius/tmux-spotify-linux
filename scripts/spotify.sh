@@ -87,8 +87,8 @@ show_menu() {
         "Play/Pause" p "run -b '$CURRENT_DIR/play_pause.sh'" \
         "Next" n "run -b '$CURRENT_DIR/next_track.sh'" \
         "Previous" b "run -b '$CURRENT_DIR/previous_track.sh" \
-        "$shuffling_label" s "run -b '$CURRENT_DIR/toggle_shuffle.sh $is_shuffle_on" \
-        "$repeating_label" r "run -b 'source \"$CURRENT_DIR/spotify.sh\" && toggle_repeat $is_repeat_on'" \
+        "$shuffling_label" s "run -b '$CURRENT_DIR/toggle_shuffle.sh $is_shuffle_on'" \
+        "$repeating_label" r "run -b '$CURRENT_DIR/toggle_loop.sh $loop_status'" \
         "" \
         "Close menu" q ""
     )
