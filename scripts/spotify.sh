@@ -11,14 +11,6 @@ get_metadata() {
   echo $(busctl -j --user get-property org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player Metadata)
 }
 
-previous_track() {
-  $(osascript -e "tell application \"Spotify\" to previous track")
-}
-
-next_track() {
-  $(osascript -e "tell application \"Spotify\" to next track")
-}
-
 toggle_repeat() {
   if [ "$1" == "true" ]; then
     $(osascript -e "tell application \"Spotify\" to set repeating to false")
@@ -29,14 +21,6 @@ toggle_repeat() {
 
 get_shuffle_status() {
   echo $(busctl -j --user get-property org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player Shuffle | jq -r '.data')
-}
-
-toggle_shuffle() {
-  if [ "$1" == "true" ]; then
-    $(osascript -e "tell application \"Spotify\" to set shuffling to false")
-  else
-    $(osascript -e "tell application \"Spotify\" to set shuffling to true")
-  fi
 }
 
 show_menu() {
@@ -103,7 +87,7 @@ show_menu() {
         "Play/Pause" p "run -b '$CURRENT_DIR/play_pause.sh'" \
         "Next" n "run -b '$CURRENT_DIR/next_track.sh'" \
         "Previous" b "run -b '$CURRENT_DIR/previous_track.sh" \
-        "$shuffling_label" s "run -b 'source \"$CURRENT_DIR/spotify.sh\" && toggle_shuffle $is_shuffle_on'" \
+        "$shuffling_label" s "run -b '$CURRENT_DIR/toggle_shuffle.sh $is_shuffle_on" \
         "" \
         "Close menu" q ""
     )
