@@ -11,10 +11,6 @@ get_metadata() {
   echo $(busctl -j --user get-property org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player Metadata)
 }
 
-toggle_play_pause() {
-  $(osascript -e "tell application \"Spotify\" to playpause")
-}
-
 previous_track() {
   $(osascript -e "tell application \"Spotify\" to previous track")
 }
@@ -85,15 +81,18 @@ show_menu() {
       shuffling_label="Turn on shuffle"
     fi
 
-    local is_repeat_on=${arr[0]}
+    # local is_repeat_on=${arr[0]}
     local repeating_label=""
 
-    if [ "$is_repeat_on" == "true" ]; then
-      repeating_label="Turn off repeat"
-    else
-      repeating_label="Turn on repeat"
-    fi
+    # if [ "$is_repeat_on" == "true" ]; then
+    #   repeating_label="Turn off repeat"
+    # else
+    #   repeating_label="Turn on repeat"
+    # fi
 
+    # "Copy URL" c "run -b 'printf \"%s\" $id | pbcopy'" \
+    # "Open Spotify" o "run -b 'source \"$CURRENT_DIR/spotify.sh\" && open_spotify'" \
+    # "$repeating_label" r "run -b 'source \"$CURRENT_DIR/spotify.sh\" && toggle_repeat $is_repeat_on'" \
     $(
       tmux display-menu -T "#[align=centre fg=green] Spotify " -x R -y P \
         "" \
@@ -101,12 +100,9 @@ show_menu() {
         "-#[nodim]Artist: $artist" "" "" \
         "-#[nodim]Album: $album" "" "" \
         "" \
-        "Copy URL" c "run -b 'printf \"%s\" $id | pbcopy'" \
-        "Open Spotify" o "run -b 'source \"$CURRENT_DIR/spotify.sh\" && open_spotify'" \
-        "Play/Pause" p "run -b 'source \"$CURRENT_DIR/spotify.sh\" && toggle_play_pause'" \
+        "Play/Pause" p "run -b '$CURRENT_DIR/play_pause.sh'" \
         "Previous" b "run -b 'source \"$CURRENT_DIR/spotify.sh\" && previous_track'" \
         "Next" n "run -b 'source \"$CURRENT_DIR/spotify.sh\" && next_track'" \
-        "$repeating_label" r "run -b 'source \"$CURRENT_DIR/spotify.sh\" && toggle_repeat $is_repeat_on'" \
         "$shuffling_label" s "run -b 'source \"$CURRENT_DIR/spotify.sh\" && toggle_shuffle $is_shuffle_on'" \
         "" \
         "Close menu" q ""
