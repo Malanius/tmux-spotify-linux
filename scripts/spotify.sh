@@ -55,6 +55,7 @@ show_menu() {
     local track_name=$(echo $metadata | jq -r '.data["xesam:title"].data')
     local album=$(echo $metadata | jq -r '.data["xesam:album"].data')
     local id=$(echo $metadata | jq -r '.data["mpris:trackid"].data')
+    local track_url=$(echo $metadata | jq -r '.data["xesam:url"].data')
 
     local is_shuffle_on=$(get_shuffle_status)
     local shuffling_label=""
@@ -75,7 +76,6 @@ show_menu() {
       repeating_label="Not looping"
     fi
 
-    # "Copy URL" c "run -b 'printf \"%s\" $id | pbcopy'" \
     # "Open Spotify" o "run -b 'source \"$CURRENT_DIR/spotify.sh\" && open_spotify'" \
     $(
       tmux display-menu -T "#[align=centre fg=green] Spotify " -x R -y P \
@@ -89,6 +89,7 @@ show_menu() {
         "Previous" b "run -b '$CURRENT_DIR/previous_track.sh" \
         "$shuffling_label" s "run -b '$CURRENT_DIR/toggle_shuffle.sh $is_shuffle_on'" \
         "$repeating_label" r "run -b '$CURRENT_DIR/toggle_loop.sh $loop_status'" \
+        "Copy URL" c "run -b 'echo $track_url | xclip -sel clip'" \
         "" \
         "Close menu" q ""
     )
