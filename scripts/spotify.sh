@@ -11,16 +11,15 @@ get_metadata() {
   echo $(busctl -j --user get-property org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player Metadata)
 }
 
-toggle_repeat() {
-  if [ "$1" == "true" ]; then
-    $(osascript -e "tell application \"Spotify\" to set repeating to false")
-  else
-    $(osascript -e "tell application \"Spotify\" to set repeating to true")
-  fi
+get_shuffle_status() {
+  echo $(busctl -j --user get-property org.mpris.MediaPlayer2.spotify \
+    /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player \
+    Shuffle | jq -r '.data')
 }
 
-get_shuffle_status() {
-  echo $(busctl -j --user get-property org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player Shuffle | jq -r '.data')
+get_loop_status() {
+  echo $(busctl -j --user get-property org.mpris.MediaPlayer2.spotify \
+    /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player LoopStatus | jq -r '.data')
 }
 
 show_menu() {
@@ -65,18 +64,19 @@ show_menu() {
       shuffling_label="Turn on shuffle"
     fi
 
-    # local is_repeat_on=${arr[0]}
+    local loop_status=$(get_loop_status)
     local repeating_label=""
 
-    # if [ "$is_repeat_on" == "true" ]; then
-    #   repeating_label="Turn off repeat"
-    # else
-    #   repeating_label="Turn on repeat"
-    # fi
+    if [ "$loop_status" == "Track" ]; then
+      repeating_label="Looping track"
+    elif [ "$loop_status" == "Playlist" ]; then
+      repeating_label="Looping playlist"
+    else
+      repeating_label="Not looping"
+    fi
 
     # "Copy URL" c "run -b 'printf \"%s\" $id | pbcopy'" \
     # "Open Spotify" o "run -b 'source \"$CURRENT_DIR/spotify.sh\" && open_spotify'" \
-    # "$repeating_label" r "run -b 'source \"$CURRENT_DIR/spotify.sh\" && toggle_repeat $is_repeat_on'" \
     $(
       tmux display-menu -T "#[align=centre fg=green] Spotify " -x R -y P \
         "" \
@@ -88,6 +88,7 @@ show_menu() {
         "Next" n "run -b '$CURRENT_DIR/next_track.sh'" \
         "Previous" b "run -b '$CURRENT_DIR/previous_track.sh" \
         "$shuffling_label" s "run -b '$CURRENT_DIR/toggle_shuffle.sh $is_shuffle_on" \
+        "$repeating_label" r "run -b 'source \"$CURRENT_DIR/spotify.sh\" && toggle_repeat $is_repeat_on'" \
         "" \
         "Close menu" q ""
     )
