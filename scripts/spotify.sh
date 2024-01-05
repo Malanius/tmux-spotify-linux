@@ -101,8 +101,8 @@ show_menu() {
         "-#[nodim]Album: $album" "" "" \
         "" \
         "Play/Pause" p "run -b '$CURRENT_DIR/play_pause.sh'" \
-        "Previous" b "run -b 'source \"$CURRENT_DIR/spotify.sh\" && previous_track'" \
-        "Next" n "run -b 'source \"$CURRENT_DIR/spotify.sh\" && next_track'" \
+        "Next" n "run -b '$CURRENT_DIR/next_track.sh'" \
+        "Previous" b "run -b '$CURRENT_DIR/previous_track.sh" \
         "$shuffling_label" s "run -b 'source \"$CURRENT_DIR/spotify.sh\" && toggle_shuffle $is_shuffle_on'" \
         "" \
         "Close menu" q ""
