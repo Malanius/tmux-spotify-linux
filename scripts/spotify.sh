@@ -113,3 +113,5 @@ show_menu() {
     )
   fi
 }
+
+show_menu
