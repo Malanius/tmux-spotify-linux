@@ -31,6 +31,30 @@ show_not_running_menu() {
   # "Open Spotify" o "run -b 'source \"$CURRENT_DIR/spotify.sh\" && open_spotify'" \
 }
 
+show_podcast_menu() {
+  # TODO: handle this after songs are working correctly
+  #   $(tmux display-menu -T "#[align=centre fg=green]Spotify" -x R -y P \
+  #       "" \
+  #       "-#[nodim]Episode: $track_name" "" "" \
+  #       "-#[nodim]Podcast: $album"      "" "" \
+  #       "" \
+  #       "Copy URL"         c "run -b 'printf \"%s\" $id | pbcopy'" \
+  #       "Open Spotify"     o "run -b 'source \"$CURRENT_DIR/spotify.sh\" && open_spotify'" \
+  #       "Play/Pause"       p "run -b 'source \"$CURRENT_DIR/spotify.sh\" && toggle_play_pause'" \
+  #       "Previous"         b "run -b 'source \"$CURRENT_DIR/spotify.sh\" && previous_track'" \
+  #       "Next"             n "run -b 'source \"$CURRENT_DIR/spotify.sh\" && next_track'" \
+  #       "$repeating_label" r "run -b 'source \"$CURRENT_DIR/spotify.sh\" && toggle_repeat $is_repeat_on'" \
+  #       "$shuffling_label" s "run -b 'source \"$CURRENT_DIR/spotify.sh\" && toggle_shuffle $is_shuffle_on'" \
+  #       "" \
+  #       "Close menu"       q "" \
+  #   )
+  tmux display-menu -T "#[align=centre fg=green] Spotify " -x R -y P \
+    "Podcasts are not supported yet" "" "" \
+    \
+    "" \
+    "Close menu" q ""
+}
+
 show_track_menu() {
   metadata=$1
   local artist=$(echo $metadata | jq -r '.data["xesam:artist"].data[0]') # Spotify only sends the first artist anywas
@@ -84,30 +108,11 @@ show_menu() {
   local id=$(echo $metadata | jq -r '.data["mpris:trackid"].data')
 
   if [[ $id == *"/episode/"* ]]; then
-    echo "Podcasts are not supported yet"
+    show_podcast_menu "$metadata"
     return
   fi
 
   show_track_menu "$metadata"
-
-  # elif [[ $id == *":episode:"* ]]; then
-  # TODO: handle this after songs are working correctly
-  #   $(tmux display-menu -T "#[align=centre fg=green]Spotify" -x R -y P \
-  #       "" \
-  #       "-#[nodim]Episode: $track_name" "" "" \
-  #       "-#[nodim]Podcast: $album"      "" "" \
-  #       "" \
-  #       "Copy URL"         c "run -b 'printf \"%s\" $id | pbcopy'" \
-  #       "Open Spotify"     o "run -b 'source \"$CURRENT_DIR/spotify.sh\" && open_spotify'" \
-  #       "Play/Pause"       p "run -b 'source \"$CURRENT_DIR/spotify.sh\" && toggle_play_pause'" \
-  #       "Previous"         b "run -b 'source \"$CURRENT_DIR/spotify.sh\" && previous_track'" \
-  #       "Next"             n "run -b 'source \"$CURRENT_DIR/spotify.sh\" && next_track'" \
-  #       "$repeating_label" r "run -b 'source \"$CURRENT_DIR/spotify.sh\" && toggle_repeat $is_repeat_on'" \
-  #       "$shuffling_label" s "run -b 'source \"$CURRENT_DIR/spotify.sh\" && toggle_shuffle $is_shuffle_on'" \
-  #       "" \
-  #       "Close menu"       q "" \
-  #   )
-
 }
 
 show_menu
