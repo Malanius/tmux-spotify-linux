@@ -32,27 +32,27 @@ show_not_running_menu() {
 }
 
 show_podcast_menu() {
-  # TODO: handle this after songs are working correctly
-  #   $(tmux display-menu -T "#[align=centre fg=green]Spotify" -x R -y P \
-  #       "" \
-  #       "-#[nodim]Episode: $track_name" "" "" \
-  #       "-#[nodim]Podcast: $album"      "" "" \
-  #       "" \
-  #       "Copy URL"         c "run -b 'printf \"%s\" $id | pbcopy'" \
-  #       "Open Spotify"     o "run -b 'source \"$CURRENT_DIR/spotify.sh\" && open_spotify'" \
-  #       "Play/Pause"       p "run -b 'source \"$CURRENT_DIR/spotify.sh\" && toggle_play_pause'" \
-  #       "Previous"         b "run -b 'source \"$CURRENT_DIR/spotify.sh\" && previous_track'" \
-  #       "Next"             n "run -b 'source \"$CURRENT_DIR/spotify.sh\" && next_track'" \
-  #       "$repeating_label" r "run -b 'source \"$CURRENT_DIR/spotify.sh\" && toggle_repeat $is_repeat_on'" \
-  #       "$shuffling_label" s "run -b 'source \"$CURRENT_DIR/spotify.sh\" && toggle_shuffle $is_shuffle_on'" \
-  #       "" \
-  #       "Close menu"       q "" \
-  #   )
+  metadata=$1
+  local title=$(echo $metadata | jq -r '.data["xesam:title"].data')
+  local podcast=$(echo $metadata | jq -r '.data["xesam:album"].data')
+  local track_url=$(echo $metadata | jq -r '.data["xesam:url"].data')
+  local possition=$(echo $metadata | jq -r '.data["mpris:position"].data')
   tmux display-menu -T "#[align=centre fg=green] Spotify " -x R -y P \
-    "Podcasts are not supported yet" "" "" \
-    \
+    "" \
+    "-#[nodim]Episode: $title" "" "" \
+    "-#[nodim]Podcast: $podcast" "" "" \
+    "" \
+    "Play/Pause" p "run -b '$CURRENT_DIR/play_pause.sh'" \
+    "Back 15s" b "run -b '$CURRENT_DIR/seek.sh -15'" \
+    "Forward 15s" n "run -b '$CURRENT_DIR/seek.sh 15'" \
+    "Copy URL" c "run -b 'echo $track_url | xclip -sel clip'" \
     "" \
     "Close menu" q ""
+
+  # Seems like the rate is not supported by spotify
+  # even Min/Max rate in DBus is always 1.0 no matter what the actual rate is
+  # "Slow down" s "run -b '$CURRENT_DIR/speed.sh -0.1'" \
+  # "Speed up" f "run -b '$CURRENT_DIR/speed.sh 0.1'" \
 }
 
 show_track_menu() {
