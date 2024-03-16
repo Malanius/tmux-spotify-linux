@@ -1,8 +1,8 @@
 # Spotify plugin for tmux on Linux
 
-[![GitHub](https://img.shields.io/github/license/malanius/tmux-spotify-linux)](https://opensource.org/licenses/MIT)
+[![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-%23FE5196?logo=conventionalcommits&logoColor=white)](https://conventionalcommits.org) [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/) [![GitHub](https://img.shields.io/github/license/malanius/tmux-spotify-linux)](https://opensource.org/licenses/MIT)
 
-Show a nice menu to manage Spotify application.
+Show a nice menu to control Spotify application.
 
 ![music](assets/podcast.png)
 ![podcast](assets/podcast.png)

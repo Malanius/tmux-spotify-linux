@@ -1,0 +1,26 @@
+{
+  "name": "tmux-spotify-linux",
+  "version": "0.0.0",
+  "description": "Tmux plugin for controlling Spotify",
+  "author": "Malanius Privierre",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Malanius/tmux-spotify-linux"
+  },
+  "license": "MIT",
+  "scripts": {
+    "commit": "git-cz",
+    "release": "standard-version",
+    "precommit": "lint-staged",
+    "prepare": "husky install"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^19.2.0",
+    "@commitlint/config-conventional": "^19.1.0",
+    "cz-conventional-changelog": "^3.3.0",
+    "husky": "^9.0.11",
+    "lint-staged": "^15.2.2",
+    "standard-version": "^9.5.0"
+  },
+  "packageManager": "yarn@1.22.19+sha1.4ba7fc5c6e704fce2066ecbfb0b0d8976fe62447"
+}
