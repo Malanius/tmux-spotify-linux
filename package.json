@@ -1,6 +1,6 @@
 {
   "name": "tmux-spotify-linux",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "Tmux plugin for controlling Spotify",
   "author": "Malanius Privierre",
   "repository": {
