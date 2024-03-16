@@ -20,7 +20,7 @@ Show a nice menu to control Spotify application.
 Add the plugin in `.tmux.conf`:
 
 ```conf
-set -g @plugin 'malanius/tmux-spotify-linux'
+set -g @plugin 'malanius/tmux-spotify-linux#main'
 ```
 
 Press `prefix + I` to fetch the plugin and source it. Done.
