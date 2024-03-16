@@ -4,7 +4,7 @@
 
 Show a nice menu to control Spotify application.
 
-![music](assets/podcast.png)
+![music](assets/music.png)
 ![podcast](assets/podcast.png)
 
 ## Installation
