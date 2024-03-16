@@ -1,103 +1,118 @@
 #!/usr/bin/env bash
 
 CURRENT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PATH="/usr/local/bin:$PATH:/usr/sbin"
 
-open_spotify() {
-  $(open -a Spotify)
+# TODO: not sure if possible, xdg-open acts weird
+# open_spotify() {
+#   $(open -a Spotify)
+# }
+
+get_metadata() {
+  echo $(busctl -j --user get-property org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player Metadata)
 }
 
-toggle_play_pause() {
-  $(osascript -e "tell application \"Spotify\" to playpause")
+get_shuffle_status() {
+  echo $(busctl -j --user get-property org.mpris.MediaPlayer2.spotify \
+    /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player \
+    Shuffle | jq -r '.data')
 }
 
-previous_track() {
-  $(osascript -e "tell application \"Spotify\" to previous track")
+get_loop_status() {
+  echo $(busctl -j --user get-property org.mpris.MediaPlayer2.spotify \
+    /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player LoopStatus | jq -r '.data')
 }
 
-next_track() {
-  $(osascript -e "tell application \"Spotify\" to next track")
+show_not_running_menu() {
+  tmux display-menu -T "#[align=centre fg=green] Spotify " -x R -y P \
+    "Spotify is not runnning!" "" "" \
+    \
+    "" \
+    "Close menu" q ""
+  # "Open Spotify" o "run -b 'source \"$CURRENT_DIR/spotify.sh\" && open_spotify'" \
 }
 
-toggle_repeat() {
-  if [ "$1" == "true" ]; then
-    $(osascript -e "tell application \"Spotify\" to set repeating to false")
-  else
-    $(osascript -e "tell application \"Spotify\" to set repeating to true")
-  fi
+show_podcast_menu() {
+  metadata=$1
+  local title=$(echo $metadata | jq -r '.data["xesam:title"].data')
+  local podcast=$(echo $metadata | jq -r '.data["xesam:album"].data')
+  local track_url=$(echo $metadata | jq -r '.data["xesam:url"].data')
+  local possition=$(echo $metadata | jq -r '.data["mpris:position"].data')
+  tmux display-menu -T "#[align=centre fg=green] Spotify " -x R -y P \
+    "" \
+    "-#[nodim]Episode: $title" "" "" \
+    "-#[nodim]Podcast: $podcast" "" "" \
+    "" \
+    "Play/Pause" p "run -b '$CURRENT_DIR/play_pause.sh'" \
+    "Back 15s" b "run -b '$CURRENT_DIR/seek.sh -15'" \
+    "Forward 15s" n "run -b '$CURRENT_DIR/seek.sh 15'" \
+    "Copy URL" c "run -b 'echo $track_url | xclip -sel clip'" \
+    "" \
+    "Close menu" q ""
+
+  # Seems like the rate is not supported by spotify
+  # even Min/Max rate in DBus is always 1.0 no matter what the actual rate is
+  # "Slow down" s "run -b '$CURRENT_DIR/speed.sh -0.1'" \
+  # "Speed up" f "run -b '$CURRENT_DIR/speed.sh 0.1'" \
 }
 
-toggle_shuffle() {
-  if [ "$1" == "true" ]; then
-    $(osascript -e "tell application \"Spotify\" to set shuffling to false")
-  else
-    $(osascript -e "tell application \"Spotify\" to set shuffling to true")
-  fi
-}
+show_track_menu() {
+  metadata=$1
+  local artist=$(echo $metadata | jq -r '.data["xesam:artist"].data[0]') # Spotify only sends the first artist anywas
+  local track_name=$(echo $metadata | jq -r '.data["xesam:title"].data')
+  local album=$(echo $metadata | jq -r '.data["xesam:album"].data')
+  local track_url=$(echo $metadata | jq -r '.data["xesam:url"].data')
 
-show_menu() {
-  local arr=""
-  IFS=$'\n' arr=($(osascript "$CURRENT_DIR/../apple_scripts/get_current_state.applescript"))
-  local is_repeat_on=${arr[0]}
-  local is_shuffle_on=${arr[1]}
-  local artist=${arr[2]}
-  local track_name=${arr[3]}
-  local album=${arr[4]}
-  local id=${arr[5]}
-
-  local repeating_label=""
+  local is_shuffle_on=$(get_shuffle_status)
   local shuffling_label=""
-
-  if [ "$is_repeat_on" == "true" ]; then
-    repeating_label="Turn off repeat"
-  else
-    repeating_label="Turn on repeat"
-  fi
-
   if [ "$is_shuffle_on" == "true" ]; then
     shuffling_label="Turn off shuffle"
   else
     shuffling_label="Turn on shuffle"
   fi
 
-  if [ "$id" == "" ]; then
-    $(tmux display-menu -T "#[align=centre fg=green]Spotify" -x R -y P \
-        "Open Spotify"     o "run -b 'source \"$CURRENT_DIR/spotify.sh\" && open_spotify'" \
-        "" \
-        "Close menu"       q "" \
-    )
-  elif [[ $id == *":episode:"* ]]; then
-    $(tmux display-menu -T "#[align=centre fg=green]Spotify" -x R -y P \
-        "" \
-        "-#[nodim]Episode: $track_name" "" "" \
-        "-#[nodim]Podcast: $album"      "" "" \
-        "" \
-        "Copy URL"         c "run -b 'printf \"%s\" $id | pbcopy'" \
-        "Open Spotify"     o "run -b 'source \"$CURRENT_DIR/spotify.sh\" && open_spotify'" \
-        "Play/Pause"       p "run -b 'source \"$CURRENT_DIR/spotify.sh\" && toggle_play_pause'" \
-        "Previous"         b "run -b 'source \"$CURRENT_DIR/spotify.sh\" && previous_track'" \
-        "Next"             n "run -b 'source \"$CURRENT_DIR/spotify.sh\" && next_track'" \
-        "$repeating_label" r "run -b 'source \"$CURRENT_DIR/spotify.sh\" && toggle_repeat $is_repeat_on'" \
-        "$shuffling_label" s "run -b 'source \"$CURRENT_DIR/spotify.sh\" && toggle_shuffle $is_shuffle_on'" \
-        "" \
-        "Close menu"       q "" \
-    )
+  local loop_status=$(get_loop_status)
+  local repeating_label=""
+
+  if [ "$loop_status" == "Track" ]; then
+    repeating_label="Looping track"
+  elif [ "$loop_status" == "Playlist" ]; then
+    repeating_label="Looping playlist"
   else
-    $(tmux display-menu -T "#[align=centre fg=green]Spotify" -x R -y P \
-        "" \
-        "-#[nodim]Track: $track_name" "" "run -b 'printf \"%s\" $quoted_track_name | pbcopy'" \
-        "-#[nodim]Artist: $artist"    "" "" \
-        "-#[nodim]Album: $album"      "" "" \
-        "" \
-        "Copy URL"         c "run -b 'printf \"%s\" $id | pbcopy'" \
-        "Open Spotify"     o "run -b 'source \"$CURRENT_DIR/spotify.sh\" && open_spotify'" \
-        "Play/Pause"       p "run -b 'source \"$CURRENT_DIR/spotify.sh\" && toggle_play_pause'" \
-        "Previous"         b "run -b 'source \"$CURRENT_DIR/spotify.sh\" && previous_track'" \
-        "Next"             n "run -b 'source \"$CURRENT_DIR/spotify.sh\" && next_track'" \
-        "$repeating_label" r "run -b 'source \"$CURRENT_DIR/spotify.sh\" && toggle_repeat $is_repeat_on'" \
-        "$shuffling_label" s "run -b 'source \"$CURRENT_DIR/spotify.sh\" && toggle_shuffle $is_shuffle_on'" \
-        "" \
-        "Close menu"       q "" \
-    )
+    repeating_label="Not looping"
   fi
+
+  tmux display-menu -T "#[align=centre fg=green] Spotify " -x R -y P \
+    "" \
+    "-#[nodim]Track: $track_name" "" "run -b 'printf \"%s\" $quoted_track_name | pbcopy'" \
+    "-#[nodim]Artist: $artist" "" "" \
+    "-#[nodim]Album: $album" "" "" \
+    "" \
+    "Play/Pause" p "run -b '$CURRENT_DIR/play_pause.sh'" \
+    "Next" n "run -b '$CURRENT_DIR/next_track.sh'" \
+    "Previous" b "run -b '$CURRENT_DIR/previous_track.sh" \
+    "$shuffling_label" s "run -b '$CURRENT_DIR/toggle_shuffle.sh $is_shuffle_on'" \
+    "$repeating_label" r "run -b '$CURRENT_DIR/toggle_loop.sh $loop_status'" \
+    "Copy URL" c "run -b 'echo $track_url | xclip -sel clip'" \
+    "" \
+    "Close menu" q ""
 }
+
+show_menu() {
+  local spotify_pid=$(pidof -s spotify || pidof -s .spotify.wrapped)
+  if [ -z "$spotify_pid" ]; then
+    show_not_running_menu
+    return
+  fi
+
+  local metadata=$(get_metadata)
+  local id=$(echo $metadata | jq -r '.data["mpris:trackid"].data')
+
+  if [[ $id == *"/episode/"* ]]; then
+    show_podcast_menu "$metadata"
+    return
+  fi
+
+  show_track_menu "$metadata"
+}
+
+show_menu
