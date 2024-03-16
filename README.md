@@ -81,6 +81,7 @@ But since almost every media player on Linux supports [MPRIS](https://specificat
 * [xamut](https://github.com/xamut) for the original plugin that inspired this
 * [pwittchen](https://github.com/pwittchen/) for the Python cli app that showed me that using MPRIS is possible
 * creators of [D-Spy](https://apps.gnome.org/en-GB/Dspy/) which has been invaluable in figuring out how to control Spotify via MPRIS and DBus
+* [Zed Erevanayen](https://github.com/erevanayen) for being there along the way, pushing me to finish this and taking me to places where most of this was written
 
 ## License
 
