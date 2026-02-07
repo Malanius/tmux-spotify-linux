@@ -48,7 +48,7 @@ show_podcast_menu() {
         "Play/Pause" p "run -b '$CURRENT_DIR/play_pause.sh'" \
         "Back 15s" b "run -b '$CURRENT_DIR/seek.sh -15'" \
         "Forward 15s" n "run -b '$CURRENT_DIR/seek.sh 15'" \
-        "Copy URL" c "run -b '$CURRENT_DIR/copy_url.sh $track_url'" \
+        "Copy URL" c "run -b \"$CURRENT_DIR/copy_url.sh '$track_url'\"" \
         "" \
         "Close menu" q ""
 
@@ -101,7 +101,7 @@ show_track_menu() {
         "Previous" b "run -b '$CURRENT_DIR/previous_track.sh'" \
         "$shuffling_label" s "run -b '$CURRENT_DIR/toggle_shuffle.sh $is_shuffle_on'" \
         "$repeating_label" r "run -b '$CURRENT_DIR/toggle_loop.sh $loop_status'" \
-        "Copy URL" c "run -b '$CURRENT_DIR/copy_url.sh $track_url'" \
+        "Copy URL" c "run -b \"$CURRENT_DIR/copy_url.sh '$track_url'\"" \
         "" \
         "Close menu" q ""
 }
