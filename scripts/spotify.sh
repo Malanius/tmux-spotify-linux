@@ -33,7 +33,7 @@ show_not_running_menu() {
 }
 
 show_podcast_menu() {
-    metadata=$1
+    local metadata=$1
     local title
     title=$(echo "$metadata" | jq -r '.data["xesam:title"].data')
     local podcast
@@ -59,7 +59,7 @@ show_podcast_menu() {
 }
 
 show_track_menu() {
-    metadata=$1
+    local metadata=$1
     local artist
     artist=$(echo "$metadata" | jq -r '.data["xesam:artist"].data[0]') # Spotify only sends the first artist anywas
     local track_name
