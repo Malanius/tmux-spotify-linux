@@ -2,36 +2,41 @@
 # https://git-cliff.org/docs/configuration
 
 [changelog]
-# A Tera template to be rendered as the changelog's header.
+# A Tera template to be rendered as the changelog's footer.
 # See https://keats.github.io/tera/docs/#introduction
 header = """
 # Changelog\n
-All notable changes to this project will be documented in this file.\n
+All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.\n
 """
 # A Tera template to be rendered for each release in the changelog.
 # See https://keats.github.io/tera/docs/#introduction
 body = """
+---
 {% if version %}\
-    ## {{ version | trim_start_matches(pat="v") }} - {{ timestamp | date(format="%Y-%m-%d") }}
-{% else %}\
-    ## Unreleased
-{% endif %}\
-{% if previous %}\
-    {% if previous.commit_id and commit_id %}
-        [{{ previous.commit_id | truncate(length=7, end="") }}]({{ previous.commit_id }})...\
-            [{{ commit_id | truncate(length=7, end="") }}]({{ commit_id }})
+    {% if previous.version %}\
+        ## [{{ version | trim_start_matches(pat="v") }}]($REPO/compare/{{ previous.version }}..{{ version }}) - {{ timestamp | date(format="%Y-%m-%d") }}
+    {% else %}\
+        ## [{{ version | trim_start_matches(pat="v") }}] - {{ timestamp | date(format="%Y-%m-%d") }}
     {% endif %}\
+{% else %}\
+    ## [unreleased]
 {% endif %}\
 {% for group, commits in commits | group_by(attribute="group") %}
-    ### {{ group | upper_first }}
-    {% for commit in commits %}
-        - {{ commit.message | split(pat="\n") | first | upper_first | trim }} ([{{ commit.id | truncate(length=7, end="") }}]({{ commit.id }}))\
-          {% if commit.footers %}\
-            {% for footer in commit.footers -%}
-                , {{ footer.token }}{{ footer.separator }}{{ footer.value }}\
-            {% endfor %}\
-          {% endif %}\
-    {% endfor %}
+    ### {{ group | striptags | trim | upper_first }}
+    {% for commit in commits
+    | filter(attribute="scope")
+    | sort(attribute="scope") %}
+        - **({{commit.scope}})**{% if commit.breaking %} [**breaking**]{% endif %} \
+            {{ commit.message }} - ([{{ commit.id | truncate(length=7, end="") }}]($REPO/commit/{{ commit.id }})) - {{ commit.author.name }}
+    {%- endfor -%}
+    {% raw %}\n{% endraw %}\
+    {%- for commit in commits %}
+        {%- if commit.scope -%}
+        {% else -%}
+            - {% if commit.breaking %} [**breaking**]{% endif %}\
+                {{ commit.message }} - ([{{ commit.id | truncate(length=7, end="") }}]($REPO/commit/{{ commit.id }})) - {{ commit.author.name }}
+        {% endif -%}
+    {% endfor -%}
 {% endfor %}\n
 """
 # A Tera template to be rendered as the changelog's footer.
@@ -41,13 +46,25 @@ footer = """
 """
 # Remove leading and trailing whitespaces from the changelog's body.
 trim = true
+# postprocessors
+postprocessors = [
+    # Replace the placeholder `<REPO>` with a URL.
+    { pattern = '\$REPO', replace = "https://github.com/cocogitto/cocogitto" }, # replace repository URL
+]
 
 [git]
 # Parse commits according to the conventional commits specification.
 # See https://www.conventionalcommits.org
 conventional_commits = true
 # Exclude commits that do not match the conventional commits specification.
-filter_unconventional = false
+filter_unconventional = true
+# Split commits on newlines, treating each line as an individual commit.
+split_commits = false
+# An array of regex based parsers to modify commit messages prior to further processing.
+commit_preprocessors = [
+    # Replace issue numbers with link templates to be updated in `changelog.postprocessors`.
+    #{ pattern = '\((\w+\s)?#([0-9]+)\)', replace = "([#${2}](https://github.com/orhun/git-cliff/issues/${2}))"},
+]
 # An array of regex based parsers for extracting data from the commit message.
 # Assigns commits to groups.
 # Optionally sets the commit's scope and can decide to exclude commits from further processing.
@@ -56,14 +73,12 @@ commit_parsers = [
     { message = "^fix", group = "Bug Fixes" },
     { message = "^doc", group = "Documentation" },
     { message = "^perf", group = "Performance" },
-    { message = "^refactor", group = "Refactor" },
-    { message = "^style", group = "Styling" },
-    { message = "^test", group = "Testing" },
-    { message = "^chore\\(deps.*\\)", skip = true },
-    { message = "^chore\\(pr\\)", skip = true },
-    { message = "^chore\\(pull\\)", skip = true },
-    { message = "^chore\\(release\\): prepare for", skip = true },
-    { message = "^chore|^ci", group = "Miscellaneous Tasks" },
+    { message = "^refactor", group = "Refactoring" },
+    { message = "^style", group = "Style" },
+    { message = "^revert", group = "Revert" },
+    { message = "^test", group = "Tests" },
+    { message = "^chore\\(version\\):", skip = true },
+    { message = "^chore", group = "Miscellaneous Chores" },
     { body = ".*security", group = "Security" },
 ]
 # Exclude commits that are not matched by any commit parser.
