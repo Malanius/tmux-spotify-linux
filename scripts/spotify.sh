@@ -25,7 +25,7 @@ get_loop_status() {
 
 show_not_running_menu() {
     tmux display-menu -T "#[align=centre fg=green] Spotify " -x R -y P \
-        "Spotify is not runnning!" "" "" \
+        "Spotify is not running!" "" "" \
         \
         "" \
         "Close menu" q ""
@@ -61,7 +61,7 @@ show_podcast_menu() {
 show_track_menu() {
     local metadata=$1
     local artist
-    artist=$(echo "$metadata" | jq -r '.data["xesam:artist"].data[0]') # Spotify only sends the first artist anywas
+    artist=$(echo "$metadata" | jq -r '.data["xesam:artist"].data[0]') # Spotify only sends the first artist anyway
     local track_name
     track_name=$(echo "$metadata" | jq -r '.data["xesam:title"].data')
     local album
