@@ -9,11 +9,13 @@ All notable changes to this project will be documented in this file. See [conven
 
 - make copy script executable - ([10932d8](https://github.com/cocogitto/cocogitto/commit/10932d83ac2140d67f2ef526e57ec6e9a13f62f8)) - Michal Slota
 - add mising single quote - ([5125a5f](https://github.com/cocogitto/cocogitto/commit/5125a5f03a2dda9942f95889411122d643129364)) - Michal Slota
+- use only one copy command - ([75be868](https://github.com/cocogitto/cocogitto/commit/75be868e24aa8016d5d2804aa13fbf2f25d37bf9)) - Michal Slota
 
 ### Documentation
 
 - update acknowledgements - ([7fd05fe](https://github.com/cocogitto/cocogitto/commit/7fd05fe7dc759aed2a679ef03344eb98b439da0c)) - Malanius Privierre
 - update changelog - ([5266d40](https://github.com/cocogitto/cocogitto/commit/5266d405f0d146dd31de7795185d011483378edb)) - Michal Slota
+- switch to cocogitto template for CHANGELOG - ([3db51a0](https://github.com/cocogitto/cocogitto/commit/3db51a05dee549e31b0bea468decf2cf10d16503)) - Michal Slota
 
 ### Features
 
