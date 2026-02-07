@@ -92,7 +92,7 @@ show_track_menu() {
 
   tmux display-menu -T "#[align=centre fg=green] Spotify " -x R -y P \
     "" \
-    "-#[nodim]Track: $track_name" "" \
+    "-#[nodim]Track: $track_name" "" "" \
     "-#[nodim]Artist: $artist" "" "" \
     "-#[nodim]Album: $album" "" "" \
     "" \
