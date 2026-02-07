@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 speed_offset=$1
 
 current_speed=$(busctl --user get-property org.mpris.MediaPlayer2.spotify \

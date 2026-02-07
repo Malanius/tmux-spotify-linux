@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 offset_s=$1
 current_position=$(busctl --user get-property org.mpris.MediaPlayer2.spotify \
     /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player Position | awk '{print $2}')
