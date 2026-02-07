@@ -4,15 +4,17 @@ All notable changes to this project will be documented in this file.
 
 ## 1.1.0 - 2026-02-07
 
-[2322306](2322306b9f1a000e3a194e86ec204b658776d9dc)...[10932d8](10932d83ac2140d67f2ef526e57ec6e9a13f62f8)
+[2322306](2322306b9f1a000e3a194e86ec204b658776d9dc)...[3b755b7](3b755b78d835ed1d0cd9b7e41292d26cead048dd)
 
 ### Bug Fixes
 
 - Make copy script executable ([10932d8](10932d83ac2140d67f2ef526e57ec6e9a13f62f8))
+- Add mising single quote ([3b755b7](3b755b78d835ed1d0cd9b7e41292d26cead048dd))
 
 ### Documentation
 
 - Update acknowledgements ([7fd05fe](7fd05fe7dc759aed2a679ef03344eb98b439da0c))
+- Update changelog ([5266d40](5266d405f0d146dd31de7795185d011483378edb))
 
 ### Features
 
