@@ -9,4 +9,4 @@ elif command -v xclip &> /dev/null; then
 fi
 
 # It's OK to do nothing if none of the above commands are available
-# Far better then throwing an error into tmux session
+# Far better than throwing an error into tmux session
