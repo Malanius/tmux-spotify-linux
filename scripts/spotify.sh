@@ -8,21 +8,19 @@ CURRENT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # }
 
 get_metadata() {
-    # shellcheck disable=SC2005
-    echo "$(busctl -j --user get-property org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player Metadata)"
+    busctl -j --user get-property org.mpris.MediaPlayer2.spotify \
+    /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player Metadata
 }
 
 get_shuffle_status() {
-    # shellcheck disable=SC2005
-    echo "$(busctl -j --user get-property org.mpris.MediaPlayer2.spotify \
+    busctl -j --user get-property org.mpris.MediaPlayer2.spotify \
     /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player \
-    Shuffle | jq -r '.data')"
+    Shuffle | jq -r '.data'
 }
 
 get_loop_status() {
-    # shellcheck disable=SC2005
-  echo "$(busctl -j --user get-property org.mpris.MediaPlayer2.spotify \
-    /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player LoopStatus | jq -r '.data')"
+  busctl -j --user get-property org.mpris.MediaPlayer2.spotify \
+    /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player LoopStatus | jq -r '.data'
 }
 
 show_not_running_menu() {
