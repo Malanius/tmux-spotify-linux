@@ -10,6 +10,9 @@ All notable changes to this project will be documented in this file. See [conven
 - make copy script executable - ([10932d8](https://github.com/malanius/tmux-spotify-linux/commit/10932d83ac2140d67f2ef526e57ec6e9a13f62f8)) - Michal Slota
 - add mising single quote - ([5125a5f](https://github.com/malanius/tmux-spotify-linux/commit/5125a5f03a2dda9942f95889411122d643129364)) - Michal Slota
 - use only one copy command - ([75be868](https://github.com/malanius/tmux-spotify-linux/commit/75be868e24aa8016d5d2804aa13fbf2f25d37bf9)) - Michal Slota
+- return bus operations directly - ([74bbb17](https://github.com/malanius/tmux-spotify-linux/commit/74bbb17000c491835b5aaaa0d2071bc31798e3d6)) - Michal Slota
+- use correct copy commands - ([1cdd85a](https://github.com/malanius/tmux-spotify-linux/commit/1cdd85a17948c1fdb2fbae05f0ac686ccf950227)) - Michal Slota
+- fix artist line not showing up - ([141c58a](https://github.com/malanius/tmux-spotify-linux/commit/141c58a7910b958f41fb0228f3293a7469c513d7)) - Michal Slota
 
 ### Documentation
 
@@ -17,6 +20,7 @@ All notable changes to this project will be documented in this file. See [conven
 - update changelog - ([5266d40](https://github.com/malanius/tmux-spotify-linux/commit/5266d405f0d146dd31de7795185d011483378edb)) - Michal Slota
 - switch to cocogitto template for CHANGELOG - ([3db51a0](https://github.com/malanius/tmux-spotify-linux/commit/3db51a05dee549e31b0bea468decf2cf10d16503)) - Michal Slota
 - update changelog - ([44cc4ba](https://github.com/malanius/tmux-spotify-linux/commit/44cc4ba247b469f77513e96d78a6f2656a4723dd)) - Michal Slota
+- fix links in CHANGELOG - ([1abdc14](https://github.com/malanius/tmux-spotify-linux/commit/1abdc14ae49e045d0a2fe040cead17c545327669)) - Michal Slota
 
 ### Features
 
@@ -26,6 +30,7 @@ All notable changes to this project will be documented in this file. See [conven
 
 - add missing shebangs - ([cc50e86](https://github.com/malanius/tmux-spotify-linux/commit/cc50e86f156fa3ff88e66fd2e0445c329bb7d10e)) - Michal Slota
 - fix shellcheck issues - ([e9e6ed3](https://github.com/malanius/tmux-spotify-linux/commit/e9e6ed321c323dab849c129db71f2a06cfa9cfc2)) - Michal Slota
+- format scripts with shfmt - ([afc7c18](https://github.com/malanius/tmux-spotify-linux/commit/afc7c189d7d5fc6c93ebef757fac1c396475ce23)) - Michal Slota
 
 ---
 ## [1.0.0] - 2024-03-16
