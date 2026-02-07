@@ -3,7 +3,7 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 ---
-## [1.1.0](https://github.com/malanius/tmux-spotify-linux/compare/v1.0.0..v1.1.0) - 2026-02-07
+## [1.1.0](https://github.com/malanius/tmux-spotify-linux/compare/v1.0.0...v1.1.0) - 2026-02-07
 
 ### Bug Fixes
 
@@ -13,6 +13,8 @@ All notable changes to this project will be documented in this file. See [conven
 - return bus operations directly - ([74bbb17](https://github.com/malanius/tmux-spotify-linux/commit/74bbb17000c491835b5aaaa0d2071bc31798e3d6)) - Michal Slota
 - use correct copy commands - ([1cdd85a](https://github.com/malanius/tmux-spotify-linux/commit/1cdd85a17948c1fdb2fbae05f0ac686ccf950227)) - Michal Slota
 - fix artist line not showing up - ([141c58a](https://github.com/malanius/tmux-spotify-linux/commit/141c58a7910b958f41fb0228f3293a7469c513d7)) - Michal Slota
+- use local metadata variable - ([0504517](https://github.com/malanius/tmux-spotify-linux/commit/0504517ad6f749a1d5c5bf25be0e5600f6bb69ba)) - Michal Slota
+- quopte copied URL parameter - ([d485213](https://github.com/malanius/tmux-spotify-linux/commit/d485213c2f6280ee8b8253612c469409aa666210)) - Michal Slota
 
 ### Documentation
 
@@ -21,6 +23,7 @@ All notable changes to this project will be documented in this file. See [conven
 - switch to cocogitto template for CHANGELOG - ([3db51a0](https://github.com/malanius/tmux-spotify-linux/commit/3db51a05dee549e31b0bea468decf2cf10d16503)) - Michal Slota
 - update changelog - ([44cc4ba](https://github.com/malanius/tmux-spotify-linux/commit/44cc4ba247b469f77513e96d78a6f2656a4723dd)) - Michal Slota
 - fix links in CHANGELOG - ([1abdc14](https://github.com/malanius/tmux-spotify-linux/commit/1abdc14ae49e045d0a2fe040cead17c545327669)) - Michal Slota
+- update CHANGELOG - ([6e9e4a0](https://github.com/malanius/tmux-spotify-linux/commit/6e9e4a0237675d62c0a174b46a80ba10807ee723)) - Michal Slota
 
 ### Features
 
@@ -31,6 +34,7 @@ All notable changes to this project will be documented in this file. See [conven
 - add missing shebangs - ([cc50e86](https://github.com/malanius/tmux-spotify-linux/commit/cc50e86f156fa3ff88e66fd2e0445c329bb7d10e)) - Michal Slota
 - fix shellcheck issues - ([e9e6ed3](https://github.com/malanius/tmux-spotify-linux/commit/e9e6ed321c323dab849c129db71f2a06cfa9cfc2)) - Michal Slota
 - format scripts with shfmt - ([afc7c18](https://github.com/malanius/tmux-spotify-linux/commit/afc7c189d7d5fc6c93ebef757fac1c396475ce23)) - Michal Slota
+- fix typos - ([e214faa](https://github.com/malanius/tmux-spotify-linux/commit/e214faa83b251f94d92ce8a000dd275b0f621998)) - Michal Slota
 
 ---
 ## [1.0.0] - 2024-03-16
