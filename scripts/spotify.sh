@@ -8,18 +8,21 @@ CURRENT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # }
 
 get_metadata() {
-  echo $(busctl -j --user get-property org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player Metadata)
+    # shellcheck disable=SC2005
+    echo "$(busctl -j --user get-property org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player Metadata)"
 }
 
 get_shuffle_status() {
-  echo $(busctl -j --user get-property org.mpris.MediaPlayer2.spotify \
+    # shellcheck disable=SC2005
+    echo "$(busctl -j --user get-property org.mpris.MediaPlayer2.spotify \
     /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player \
-    Shuffle | jq -r '.data')
+    Shuffle | jq -r '.data')"
 }
 
 get_loop_status() {
-  echo $(busctl -j --user get-property org.mpris.MediaPlayer2.spotify \
-    /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player LoopStatus | jq -r '.data')
+    # shellcheck disable=SC2005
+  echo "$(busctl -j --user get-property org.mpris.MediaPlayer2.spotify \
+    /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player LoopStatus | jq -r '.data')"
 }
 
 show_not_running_menu() {
@@ -33,10 +36,12 @@ show_not_running_menu() {
 
 show_podcast_menu() {
   metadata=$1
-  local title=$(echo $metadata | jq -r '.data["xesam:title"].data')
-  local podcast=$(echo $metadata | jq -r '.data["xesam:album"].data')
-  local track_url=$(echo $metadata | jq -r '.data["xesam:url"].data')
-  local possition=$(echo $metadata | jq -r '.data["mpris:position"].data')
+  local title
+  title=$(echo "$metadata" | jq -r '.data["xesam:title"].data')
+  local podcast
+  podcast=$(echo "$metadata" | jq -r '.data["xesam:album"].data')
+  local track_url
+  track_url=$(echo "$metadata" | jq -r '.data["xesam:url"].data')
   tmux display-menu -T "#[align=centre fg=green] Spotify " -x R -y P \
     "" \
     "-#[nodim]Episode: $title" "" "" \
@@ -57,12 +62,17 @@ show_podcast_menu() {
 
 show_track_menu() {
   metadata=$1
-  local artist=$(echo $metadata | jq -r '.data["xesam:artist"].data[0]') # Spotify only sends the first artist anywas
-  local track_name=$(echo $metadata | jq -r '.data["xesam:title"].data')
-  local album=$(echo $metadata | jq -r '.data["xesam:album"].data')
-  local track_url=$(echo $metadata | jq -r '.data["xesam:url"].data')
+  local artist
+  artist=$(echo "$metadata" | jq -r '.data["xesam:artist"].data[0]') # Spotify only sends the first artist anywas
+  local track_name
+  track_name=$(echo "$metadata" | jq -r '.data["xesam:title"].data')
+  local album
+  album=$(echo "$metadata" | jq -r '.data["xesam:album"].data')
+  local track_url
+  track_url=$(echo "$metadata" | jq -r '.data["xesam:url"].data')
 
-  local is_shuffle_on=$(get_shuffle_status)
+  local is_shuffle_on
+  is_shuffle_on=$(get_shuffle_status)
   local shuffling_label=""
   if [ "$is_shuffle_on" == "true" ]; then
     shuffling_label="Turn off shuffle"
@@ -70,7 +80,8 @@ show_track_menu() {
     shuffling_label="Turn on shuffle"
   fi
 
-  local loop_status=$(get_loop_status)
+  local loop_status
+  loop_status=$(get_loop_status)
   local repeating_label=""
 
   if [ "$loop_status" == "Track" ]; then
@@ -83,7 +94,7 @@ show_track_menu() {
 
   tmux display-menu -T "#[align=centre fg=green] Spotify " -x R -y P \
     "" \
-    "-#[nodim]Track: $track_name" "" "run -b 'printf \"%s\" $quoted_track_name | pbcopy'" \
+    "-#[nodim]Track: $track_name" "" \
     "-#[nodim]Artist: $artist" "" "" \
     "-#[nodim]Album: $album" "" "" \
     "" \
@@ -98,14 +109,17 @@ show_track_menu() {
 }
 
 show_menu() {
-  local spotify_pid=$(pidof -s spotify || pidof -s .spotify.wrapped)
+  local spotify_pid
+  spotify_pid=$(pidof -s spotify || pidof -s .spotify.wrapped)
   if [ -z "$spotify_pid" ]; then
     show_not_running_menu
     return
   fi
 
-  local metadata=$(get_metadata)
-  local id=$(echo $metadata | jq -r '.data["mpris:trackid"].data')
+  local metadata
+  metadata=$(get_metadata)
+  local id
+  id=$(echo "$metadata" | jq -r '.data["mpris:trackid"].data')
 
   if [[ $id == *"/episode/"* ]]; then
     show_podcast_menu "$metadata"
