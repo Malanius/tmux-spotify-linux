@@ -1,5 +1,24 @@
 # Changelog
 
+## [1.1.0](https://github.com/Malanius/tmux-spotify-linux/compare/v1.0.0...v1.1.0) (2026-02-08)
+
+
+### Features
+
+* add support for wl-copy ([4d8b924](https://github.com/Malanius/tmux-spotify-linux/commit/4d8b924f15d37e7e786a1d04eed7fbd40ae0b745))
+
+
+### Bug Fixes
+
+* add mising single quote ([5125a5f](https://github.com/Malanius/tmux-spotify-linux/commit/5125a5f03a2dda9942f95889411122d643129364))
+* fix artist line not showing up ([141c58a](https://github.com/Malanius/tmux-spotify-linux/commit/141c58a7910b958f41fb0228f3293a7469c513d7))
+* make copy script executable ([10932d8](https://github.com/Malanius/tmux-spotify-linux/commit/10932d83ac2140d67f2ef526e57ec6e9a13f62f8))
+* quopte copied URL parameter ([d485213](https://github.com/Malanius/tmux-spotify-linux/commit/d485213c2f6280ee8b8253612c469409aa666210))
+* return bus operations directly ([74bbb17](https://github.com/Malanius/tmux-spotify-linux/commit/74bbb17000c491835b5aaaa0d2071bc31798e3d6))
+* use correct copy commands ([1cdd85a](https://github.com/Malanius/tmux-spotify-linux/commit/1cdd85a17948c1fdb2fbae05f0ac686ccf950227))
+* use local metadata variable ([0504517](https://github.com/Malanius/tmux-spotify-linux/commit/0504517ad6f749a1d5c5bf25be0e5600f6bb69ba))
+* use only one copy command ([75be868](https://github.com/Malanius/tmux-spotify-linux/commit/75be868e24aa8016d5d2804aa13fbf2f25d37bf9))
+
 ## 1.0.0 (2024-03-16)
 
 ### Features
